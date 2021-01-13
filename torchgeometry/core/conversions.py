@@ -298,10 +298,16 @@ def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
                       rmat_t[:, 0, 1] - rmat_t[:, 1, 0]], -1)
     t3_rep = t3.repeat(4, 1).t()
 
-    mask_c0 = mask_d2 * mask_d0_d1
-    mask_c1 = mask_d2 * (1 - mask_d0_d1)
-    mask_c2 = (1 - mask_d2) * mask_d0_nd1
-    mask_c3 = (1 - mask_d2) * (1 - mask_d0_nd1)
+    # mask_c0 = mask_d2 * mask_d0_d1
+    # mask_c1 = mask_d2 * (1 - mask_d0_d1)
+    # mask_c2 = (1 - mask_d2) * mask_d0_nd1
+    # mask_c3 = (1 - mask_d2) * (1 - mask_d0_nd1
+
+    mask_c0 = mask_d2.float() * mask_d0_d1.float()
+    mask_c1 = mask_d2.float() * (1 - mask_d0_d1.float())
+    mask_c2 = (1 - mask_d2.float()) * mask_d0_nd1.float()
+    mask_c3 = (1 - mask_d2.float()) * (1 - mask_d0_nd1.float())
+
     mask_c0 = mask_c0.view(-1, 1).type_as(q0)
     mask_c1 = mask_c1.view(-1, 1).type_as(q1)
     mask_c2 = mask_c2.view(-1, 1).type_as(q2)
